@@ -1,0 +1,12 @@
+
+
+Post http://localhost:3000/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"rabiori",
+    "email":"ctangtangbbang@gmail.com",
+    "password":"1234"
+}
+##############
+get http://localhost:3000/ HTTP/1.1
