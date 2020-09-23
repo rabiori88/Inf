@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+//import mongoose from "mongoose";
+//import bcrypt from "bcrypt";
+//import jwt from "jsonwebtoken";
+
 const saltRounds = 10;
 
 const userSchema = mongoose.Schema({
@@ -74,6 +78,33 @@ userSchema.methods.generateToken = function (cb) {
   user.save(function (err, user) {
     if (err) return cb(err);
     cb(null, user);
+  });
+};
+
+// userSchema.statics.findByToken = function (token, cb) {
+//   var user = this;
+//   //토큰을 decode 한다.
+//   jwt.verify(token, "secretToken", function (err, decoded) {
+//     //유저 아이디를 이용해서 유저를 찾은 다음에
+//     //클라이언트에서 가져온 token 과 db에 보관된 토근이 일치하는지 확인
+
+//     user.findOne({ _id: decoded, token: token }, function (err, user) {
+//       if (err) return cb(err);
+//       cb(null, user);
+//     });
+//   });
+// };
+userSchema.statics.findByToken = function (token, cb) {
+  var user = this;
+  // user._id + ''  = token
+  //토큰을 decode 한다.
+  jwt.verify(token, "secretToken", function (err, decoded) {
+    //유저 아이디를 이용해서 유저를 찾은 다음에
+    //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인
+    user.findOne({ _id: decoded, token: token }, function (err, user) {
+      if (err) return cb(err);
+      cb(null, user);
+    });
   });
 };
 
