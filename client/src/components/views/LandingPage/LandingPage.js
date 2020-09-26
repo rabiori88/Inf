@@ -1,7 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
 
-function LandingPage() {
-  return <div>LandingPage</div>;
+function LandingPage(props) {
+  useEffect(() => {
+    axios.get("/api/hello").then((response) => console.log(response.data));
+  }, []);
+
+  const onClickHandler = () => {
+    axios.get("api/users/logout").then((response) => {
+      if (response.data.success) {
+        props.history.push("/login");
+      } else {
+        alert("Log out Fail");
+      }
+    });
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
+      <h2>LandingPage</h2>
+      <br />
+      <button onClick={onClickHandler}>Log out</button>
+    </div>
+  );
 }
 
-export default LandingPage;
+export default withRouter(LandingPage);
